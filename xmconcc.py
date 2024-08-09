@@ -46,7 +46,6 @@ def preprocess(include_path, code):
         elif line.startswith('/include '):
             continue
         elif not line.startswith('#') and line != '':
-            line = line.replace("' '", str(ord(' '))).replace("';'", str(ord(';'))).replace(' ;', ';').replace(';', ' ;')
             for i in range(4):
                 for name in defines:
                     line = line.replace('{' + name + '}', defines[name])
@@ -70,6 +69,7 @@ def maketree(code):
         elif line.startswith('$'):
             tree += [['asm', [line[1:].strip()]]]
         else:
+            line = line.replace("'\\0'", str(0)).replace("';'", str(ord(';'))).replace(' ;', ';').replace(';', ' ;')
             for word in line.split(' '):
                 word = word.replace('(', '').replace(')', '')
                 
@@ -77,6 +77,8 @@ def maketree(code):
                     continue
                 elif word[0].isdigit():
                     tree += [['push_number', [int(word, base=0)]]]
+                elif word.startswith('#'):
+                    break
                 elif word[0] == "'":
                     tree += [['push_number', [ord(word[1])]]]
                 elif word[0] == "&":
