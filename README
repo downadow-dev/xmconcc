@@ -1,1 +1,20 @@
 Компилятор и библиотека языка xmconc, под Xmtwolime.
+.
+Пример программы со своей функцией:
+
+    "Hello!" s
+    &s (~c0 ~print goto c0:)
+    &s (~c1 ~print goto c1:)
+    0 exit
+
+    ############################
+
+    /alloc __ret
+
+    print:
+	    {__ret} =
+	    
+	    puts newline
+	    
+	    ({__ret} .) goto
+

@@ -88,7 +88,7 @@ def maketree(code):
                 elif word == ';':
                     tree += [['reset_stack_pointer', []]]
                 elif word.endswith(':'):
-                    tree += [['label', [line.replace(':', '').split(' ')[len(line.split(' ')) - 1]]]]
+                    tree += [['label', [word.replace(':', '')]]]
                 elif word == 'thrd_0':
                     tree += [['thrd_0', []]]
                 elif word == 'thrd_1':
