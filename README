@@ -6,15 +6,14 @@
     &s @print
     &s @print
     0 exit
-
+    
     ############################
-
+    
     /alloc __ret
-
-    print:
-	    {__ret} =
-	    
-	    puts newline
-	    
-	    ({__ret} .) goto
+    /define function :{__ret} =
+    /define return :({__ret} .) goto
+    
+    print: {function}
+        puts newline
+        {return}
 
