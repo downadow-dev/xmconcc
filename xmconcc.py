@@ -56,6 +56,7 @@ def preprocess(include_path, code):
 # получить древо кода
 def maketree(code):
     tree = []
+    continue_label = 0
     # формат элемента древа:
     #   [0] строка, определяющая тип операции
     #       ('thrd_0', 'string' и т. д.)
@@ -85,6 +86,12 @@ def maketree(code):
                     tree += [['push_string_addr', [word[1:]]]]
                 elif word[0] == "~":
                     tree += [['push_label', [word[1:]]]]
+                elif word[0] == "@":
+                    tree += [['push_label', ['__C' + str(continue_label)]]]
+                    tree += [['push_label', [word[1:]]]]
+                    tree += [['call', ['goto']]]
+                    tree += [['label', ['__C' + str(continue_label)]]]
+                    continue_label += 1
                 elif word == ';':
                     tree += [['reset_stack_pointer', []]]
                 elif word.endswith(':'):

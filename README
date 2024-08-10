@@ -3,8 +3,8 @@
 Пример программы со своей функцией:
 
     "Hello!" s
-    &s (~c0 ~print goto c0:)
-    &s (~c1 ~print goto c1:)
+    &s @print
+    &s @print
     0 exit
 
     ############################
