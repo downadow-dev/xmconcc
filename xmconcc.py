@@ -48,6 +48,7 @@ def preprocess(include_path, code):
         elif not line.startswith('#') and line != '':
             for i in range(4):
                 for name in defines:
+                    line = line.replace('{' + name + '}!', defines[name] + ' .')
                     line = line.replace('{' + name + '}', defines[name])
             result += line + '\n'
     
