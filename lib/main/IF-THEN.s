@@ -1,4 +1,49 @@
 
+__0_?:
+	dec %R_FA_9%
+	ild %R_FA_9%, %R_FA_1%
+	dec %R_FA_9%
+	ild %R_FA_9%, %R_FA_0%
+	
+	mov2 %R_FA_2%, <LIB_?_continue>
+	mov %R_FA_3%, 1
+	if %R_FA_0% == %R_FA_3% && %R_FA_1% == %R_FA_3%, %R_FA_2%
+	
+	mov %R_FA_0%, 0
+	isv %R_FA_0%, %R_FA_9%
+	inc %R_FA_9%
+	jmp %R_FA_8%
+	
+	LIB_?_continue:
+	
+	mov %R_FA_0%, 1
+	isv %R_FA_0%, %R_FA_9%
+	inc %R_FA_9%
+	jmp %R_FA_8%
+
+__0_|?:
+	dec %R_FA_9%
+	ild %R_FA_9%, %R_FA_1%
+	dec %R_FA_9%
+	ild %R_FA_9%, %R_FA_0%
+	
+	mov2 %R_FA_2%, <LIB_|?_continue>
+	mov %R_FA_3%, 1
+	if %R_FA_0% == %R_FA_3%, %R_FA_2%
+	if %R_FA_1% == %R_FA_3%, %R_FA_2%
+	
+	mov %R_FA_0%, 0
+	isv %R_FA_0%, %R_FA_9%
+	inc %R_FA_9%
+	jmp %R_FA_8%
+	
+	LIB_|?_continue:
+	
+	mov %R_FA_0%, 1
+	isv %R_FA_0%, %R_FA_9%
+	inc %R_FA_9%
+	jmp %R_FA_8%
+
 __0_=?:
 	dec %R_FA_9%
 	ild %R_FA_9%, %R_FA_1%
