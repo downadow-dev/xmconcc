@@ -188,17 +188,12 @@ if __name__ == '__main__':
     
     if len(sys.argv) > 1 and sys.argv[1] == '--help':
         print('xmconcc - The XMConC Compiler.')
-        print('Usage:  ./xmconcc.py [--help|--copyright] INCLUDE_PATH NAME PROG')
+        print('Usage:  ./xmconcc.py [--help] INCLUDE_PATH NAME PROG')
         print('')
         print('  --help           print this message and exit')
-        print('  --copyright      print copyright info and exit')
         print('  INCLUDE_PATH     directory of header-files')
         print('  NAME             name of XMConC program')
         print('  PROG             path to XmConC source file')
-        sys.exit(1)
-    elif len(sys.argv) > 1 and sys.argv[1] == '--copyright':
-        print('Copyright (C) 2024, Menshikov Sviatoslav Sergeevich.')
-        print('This free compiler is licensed under public-domain-like license.')
         sys.exit(1)
     
     try:
