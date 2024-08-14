@@ -1,4 +1,29 @@
 
+__1_!:
+	dec %R_FA_19%
+	ild %R_FA_19%, %R_FA_11%
+	
+	mov2 %R_FA_12%, <LIB_1_!_continue>
+	mov %R_FA_13%, 1
+	if %R_FA_11% == %R_FA_13%, %R_FA_12%
+	
+	mov %R_FA_13%, 1
+	isv %R_FA_13%, %R_FA_19%
+	
+	inc %R_FA_19%
+	
+	inc %R_FA_19%
+	jmp %R_FA_18%
+	
+	LIB_1_!_continue:
+	
+	mov %R_FA_13%, 0
+	isv %R_FA_13%, %R_FA_19%
+	
+	inc %R_FA_19%
+	
+	jmp %R_FA_18%
+
 __1_?:
 	dec %R_FA_19%
 	ild %R_FA_19%, %R_FA_11%
