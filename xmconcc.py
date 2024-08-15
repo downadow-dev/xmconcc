@@ -126,7 +126,7 @@ def compile_for_xmtwolime(prog_name, tree, outfile):
         if current_thread == 0:
             return 6900000
         else:
-            return 6901024
+            return 6925000
     
     # получить регистр для хранения адреса возврата
     def getrret():
