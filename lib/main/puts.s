@@ -9,6 +9,10 @@ __0_puts:
 		mov2 %R_FA_2%, <LIB_puts_endloop>
 		if %R_FA_1% == %R_ZERO%, %R_FA_2%
 		
+        mov2 %R_FA_4%, <__0_clear_output>
+        mov2 %R_FA_5%, 0001764
+        if %R_FA_24% > %R_FA_5%, %R_FA_4%
+        
 		; %R_FA_24% --- указатель вывода
 		vsv %R_FA_1%, %R_FA_24%
 		inc %R_FA_24%
