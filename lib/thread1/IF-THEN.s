@@ -4,8 +4,8 @@ __1_!:
 	ild %R_FA_19%, %R_FA_11%
 	
 	mov2 %R_FA_12%, <LIB_1_!_continue>
-	mov %R_FA_13%, 1
-	if %R_FA_11% == %R_FA_13%, %R_FA_12%
+	mov %R_FA_13%, 0
+	if %R_FA_11% != %R_FA_13%, %R_FA_12%
 	
 	mov %R_FA_13%, 1
 	isv %R_FA_13%, %R_FA_19%
@@ -53,9 +53,9 @@ __1_|?:
 	ild %R_FA_19%, %R_FA_10%
 	
 	mov2 %R_FA_12%, <LIB_1_|?_continue>
-	mov %R_FA_13%, 1
-	if %R_FA_10% == %R_FA_13%, %R_FA_12%
-	if %R_FA_11% == %R_FA_13%, %R_FA_12%
+	mov %R_FA_13%, 0
+	if %R_FA_10% != %R_FA_13%, %R_FA_12%
+	if %R_FA_11% != %R_FA_13%, %R_FA_12%
 	
 	mov %R_FA_10%, 0
 	isv %R_FA_10%, %R_FA_19%
@@ -160,8 +160,8 @@ __1_then:
 	dec %R_FA_19%
 	ild %R_FA_19%, %R_FA_10%
 	
-	mov %R_FA_12%, 1
-	if %R_FA_10% == %R_FA_12%, %R_FA_11%
+	mov %R_FA_12%, 0
+	if %R_FA_10% != %R_FA_12%, %R_FA_11%
 	
 	jmp %R_FA_18%
 
