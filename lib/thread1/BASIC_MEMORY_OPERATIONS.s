@@ -9,15 +9,19 @@ __1_=:
 	mov2 %R_FA_13%, <LIB_1_=_continue>
 	if %R_USER% == %R_FA_12%, %R_FA_13%
 	
-	mov %R_RETURN_CODE%, 30
 	mov2 %R_FA_12%, 6900000
-	if %R_FA_10% < %R_FA_12%, UR17
+	mov2 %R_FA_13%, <LIB_1_=_error>
+	if %R_FA_10% < %R_FA_12%, %R_FA_13%
 	
 	LIB_1_=_continue:
 	
 	isv %R_FA_11%, %R_FA_10%
 	
 	jmp %R_FA_18%
+	
+	LIB_1_=_error:
+	
+	end
 
 ;; загрузить из памяти значение в стек
 __1_.:
