@@ -87,6 +87,8 @@ def maketree(code):
                     tree += [['push_string_addr', [word[1:]]]]
                 elif word[0] == "~":
                     tree += [['push_label', [word[1:]]]]
+                elif word.startswith('<') and word.endswith('>'):
+                    tree += [['push_extern_label', [word[1:-1]]]]
                 elif word[0] == "@":
                     tree += [['push_label', ['__C' + str(continue_label)]]]
                     tree += [['push_label', [word[1:]]]]
@@ -166,6 +168,10 @@ def compile_for_xmtwolime(prog_name, tree, outfile):
             asm('inc ' + getrstackptr())
         elif block[0] == 'push_label':
             asm('mov2 ' + getreg(0) + ', <' + prog_name + '_l' + block[1][0] + '>')
+            asm('isv ' + getreg(0) + ', ' + getrstackptr())
+            asm('inc ' + getrstackptr())
+        elif block[0] == 'push_extern_label':
+            asm('mov2 ' + getreg(0) + ', <' + block[1][0] + '>')
             asm('isv ' + getreg(0) + ', ' + getrstackptr())
             asm('inc ' + getrstackptr())
         elif block[0] == 'push_string_addr':
