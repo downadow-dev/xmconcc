@@ -52,7 +52,7 @@ def preprocess(include_path, code):
                     line = line.replace('{' + name + '}', defines[name])
             result += line + '\n'
     
-    return result[:(len(result) - 1)]
+    return (result[:-1] if not '{' in result else preprocess(include_path, result))
 
 # получить древо кода
 def maketree(code):
