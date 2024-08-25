@@ -45,14 +45,17 @@ def preprocess(include_path, code):
             includes += [line.split('"')[1]]
         elif line.startswith('/include '):
             continue
-        elif not line.startswith('#') and line != '':
+        
+    for line in code:
+        line = line.strip()
+        if not line.startswith('#') and not line.startswith('/') and line != '':
             for i in range(4):
                 for name in defines:
                     line = line.replace('{' + name + '}!', defines[name] + ' .')
                     line = line.replace('{' + name + '}', defines[name])
             result += line + '\n'
     
-    return (result[:-1] if not '{' in result else preprocess(include_path, result))
+    return result[:-1]
 
 # получить древо кода
 def maketree(code):
