@@ -157,7 +157,8 @@ def compile_for_xmtwolime(prog_name, tree, outfile):
         elif block[0] == 'string':
             asm(prog_name + '_S' + block[1][0] + ':')
             asm('.goto +' + str(len(block[1][1]) + 1))
-            asm('.ascii <' + prog_name + '_S' + block[1][0] + '> "' + block[1][1] + '"')
+            if len(block[1][1]) > 0:
+                asm('.ascii <' + prog_name + '_S' + block[1][0] + '> "' + block[1][1] + '"')
         elif block[0] == 'asm':
             asm(block[1][0])
         elif block[0] == 'push_number':
