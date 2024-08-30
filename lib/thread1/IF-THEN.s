@@ -12,7 +12,6 @@ __1_!:
 	
 	inc %R_FA_19%
 	
-	inc %R_FA_19%
 	jmp %R_FA_18%
 	
 	LIB_1_!_continue:
