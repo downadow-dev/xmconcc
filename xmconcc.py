@@ -170,10 +170,8 @@ def compile_for_xmtwolime(prog_name, tree, outfile):
             asm('inc ' + getrstackptr())
         elif block[0] == 'reset_stack_pointer':
             asm('mov2 ' + getrstackptr() + ', ' + str(getstackstart()).zfill(7))
-        elif block[0] == 'call' and current_thread != 0 and block[1][0] == 'halt':
-            asm('end')
         elif block[0] == 'call':
-            asm('mov2 ' + getreg(0) + ', <__' + str(current_thread) + '_' + block[1][0] + '>')
+            asm('mov2 ' + getreg(0) + ', <__0_' + block[1][0] + '>')
             asm('mov2 ' + getrret() + ', <' + prog_name + '_L' + str(current_label) + '>')
             asm('jmp ' + getreg(0))
             asm(prog_name + '_L' + str(current_label) + ':')
