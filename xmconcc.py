@@ -102,25 +102,20 @@ def maketree(code):
                     tree += [['reset_stack_pointer', []]]
                 elif word.endswith(':'):
                     tree += [['label', [word.replace(':', '')]]]
-                elif word == 'thrd_0':
-                    tree += [['thrd_0', []]]
-                elif word == 'thrd_1':
-                    tree += [['thrd_1', []]]
                 else:
                     tree += [['call', [word]]]
     return tree
 
 # перевести в ассемблерный код Makexm2c
 def compile_for_xmtwolime(prog_name, tree, outfile):
-    current_thread = 0             # текущий поток
     current_label = 0              # номер следующей вспомогательной метки
     
     def asm(code):
         print(code, file=outfile)
     
-    # получить номер п. регистра для текущего потока
+    # получить номер п. регистра
     def getreg(base):
-        return '%R_FA_' + str(base + (10 if current_thread != 0 else 0)) + '%'
+        return '%R_FA_' + str(base) + '%'
     
     # получить регистр хранения указателя стека
     def getrstackptr():
@@ -128,10 +123,7 @@ def compile_for_xmtwolime(prog_name, tree, outfile):
     
     # получить начало стека
     def getstackstart():
-        if current_thread == 0:
-            return 6900000
-        else:
-            return 6925000
+        return 6900000
     
     # получить регистр для хранения адреса возврата
     def getrret():
@@ -146,13 +138,7 @@ def compile_for_xmtwolime(prog_name, tree, outfile):
     ###########################
     
     for block in tree:
-        if block[0] == 'thrd_0':
-            current_thread = 0
-            asm('mov2 ' + getrstackptr() + ', ' + str(getstackstart()).zfill(7))
-        elif block[0] == 'thrd_1':
-            current_thread = 1
-            asm('mov2 ' + getrstackptr() + ', ' + str(getstackstart()).zfill(7))
-        elif block[0] == 'label':
+        if block[0] == 'label':
             asm(prog_name + '_l' + block[1][0] + ':')
         elif block[0] == 'string':
             asm(prog_name + '_S' + block[1][0] + ':')
