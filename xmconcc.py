@@ -63,7 +63,7 @@ def maketree(code):
     continue_label = 0
     # формат элемента древа:
     #   [0] строка, определяющая тип операции
-    #       ('thrd_0', 'string' и т. д.)
+    #       ('asm', 'string' и т. д.)
     #   [1] является массивом аргументов операции
     #       (например, у 'label' это одна строка)
     for line in code.split('\n'):
@@ -123,17 +123,33 @@ def compile_for_xmtwolime(prog_name, tree, outfile):
     
     # получить начало стека
     def getstackstart():
-        return 6900000
+        return 6900100
     
     # получить регистр для хранения адреса возврата
     def getrret():
         return getreg(8)
+    
+    # получить регистр для хранения номера текущего потока
+    def getrthread():
+        return getreg(7)
     
     ###########################
     
     asm(prog_name + ':')
     asm('mov2 ' + getrstackptr() + ', ' + str(getstackstart()).zfill(7))
     asm('mov %R_FA_24%, %OUT_ST%')  # сброс указателя вывода
+    asm('mov ' + getrthread() + ', 0')
+    
+    asm('mov2 ' + getreg(0) + ', 6900000')
+    asm('mov2 ' + getreg(1) + ', ' + str(getstackstart()).zfill(7))
+    asm('mov2 ' + getreg(2) + ', <' + prog_name + '_L' + str(current_label) + '>')
+    asm('mov ' + getreg(3) + ', 1')
+    asm('neg ' + getreg(3))
+    asm(prog_name + '_L' + str(current_label) + ':')
+    current_label += 1
+    asm('isv ' + getreg(3) + ', ' + getreg(0))
+    asm('inc ' + getreg(0))
+    asm('if ' + getreg(0) + ' < ' + getreg(1) + ', ' + getreg(2))
     
     ###########################
     
@@ -171,11 +187,21 @@ def compile_for_xmtwolime(prog_name, tree, outfile):
         elif block[0] == 'reset_stack_pointer':
             asm('mov2 ' + getrstackptr() + ', ' + str(getstackstart()).zfill(7))
         elif block[0] == 'call':
-            asm('mov2 ' + getreg(0) + ', <__0_' + block[1][0] + '>')
-            asm('mov2 ' + getrret() + ', <' + prog_name + '_L' + str(current_label) + '>')
+            asm('mov2 ' + getreg(0) + ', <__0___next_thread>')
+            if block[1][0] != 'goto' and block[1][0] != 'xm2_code':
+                asm('mov2 ' + getrret() + ', <' + prog_name + '_L' + str(current_label) + '>')
+            else:
+                asm('dec ' + getrstackptr())
+                asm('ild ' + getrstackptr() + ', ' + getrret())
             asm('jmp ' + getreg(0))
-            asm(prog_name + '_L' + str(current_label) + ':')
-            current_label += 1
+            if block[1][0] != 'goto' and block[1][0] != 'xm2_code':
+                asm(prog_name + '_L' + str(current_label) + ':')
+                current_label += 1
+                asm('mov2 ' + getreg(0) + ', <__0_' + block[1][0] + '>')
+                asm('mov2 ' + getrret() + ', <' + prog_name + '_L' + str(current_label) + '>')
+                asm('jmp ' + getreg(0))
+                asm(prog_name + '_L' + str(current_label) + ':')
+                current_label += 1
 
 ###################################################################
 
