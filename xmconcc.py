@@ -107,7 +107,7 @@ def maketree(code):
     return tree
 
 # перевести в ассемблерный код Makexm2c
-def compile_for_xmtwolime(prog_name, tree, outfile):
+def compile_for_xmtwolime(prog_name, tree, outfile, mt=False):
     current_label = 0              # номер следующей вспомогательной метки
     
     def asm(code):
@@ -186,7 +186,7 @@ def compile_for_xmtwolime(prog_name, tree, outfile):
             asm('inc ' + getrstackptr())
         elif block[0] == 'reset_stack_pointer':
             asm('mov2 ' + getrstackptr() + ', ' + str(getstackstart()).zfill(7))
-        elif block[0] == 'call':
+        elif block[0] == 'call' and mt:
             asm('mov2 ' + getreg(0) + ', <__0___next_thread>')
             if block[1][0] != 'goto' and block[1][0] != 'xm2_code':
                 asm('mov2 ' + getrret() + ', <' + prog_name + '_L' + str(current_label) + '>')
@@ -202,6 +202,16 @@ def compile_for_xmtwolime(prog_name, tree, outfile):
                 asm('jmp ' + getreg(0))
                 asm(prog_name + '_L' + str(current_label) + ':')
                 current_label += 1
+        elif block[0] == 'call' and (block[1][0] == 'goto' or block[1][0] == 'xm2_code'):
+            asm('dec ' + getrstackptr())
+            asm('ild ' + getrstackptr() + ', ' + getrret())
+            asm('jmp ' + getrret())
+        elif block[0] == 'call':
+            asm('mov2 ' + getreg(0) + ', <__0_' + block[1][0] + '>')
+            asm('mov2 ' + getrret() + ', <' + prog_name + '_L' + str(current_label) + '>')
+            asm('jmp ' + getreg(0))
+            asm(prog_name + '_L' + str(current_label) + ':')
+            current_label += 1
 
 ###################################################################
 
@@ -210,12 +220,13 @@ if __name__ == '__main__':
     
     if len(sys.argv) > 1 and sys.argv[1] == '--help':
         print('xmconcc - The XMConC Compiler.')
-        print('Usage:  ./xmconcc.py [--help] INCLUDE_PATH NAME PROG')
+        print('Usage:  ./xmconcc.py [--help] INCLUDE_PATH NAME PROG [-mt]')
         print('')
         print('  --help           print this message and exit')
         print('  INCLUDE_PATH     directory of header-files')
         print('  NAME             name of XMConC program')
         print('  PROG             path to XmConC source file')
+        print('  -mt              support for multi-threading')
         sys.exit(1)
     
     try:
@@ -230,4 +241,4 @@ if __name__ == '__main__':
     except Exception:
         sys.exit(2)
     
-    compile_for_xmtwolime(progname, maketree(preprocess(sys.argv[1], fcontent)), sys.stdout)
+    compile_for_xmtwolime(progname, maketree(preprocess(sys.argv[1], fcontent)), sys.stdout, mt=(True if len(sys.argv) > 4 and sys.argv[4] == '-mt' else False))
