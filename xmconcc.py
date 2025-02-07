@@ -144,7 +144,7 @@ def compile_for_xmtwolime(prog_name, tree, outfile, mt=False):
     asm('mov2 ' + getreg(1) + ', ' + str(getstackstart()).zfill(7))
     asm('mov2 ' + getreg(2) + ', <' + prog_name + '_L' + str(current_label) + '>')
     asm('mov ' + getreg(3) + ', 1')
-    asm('neg ' + getreg(3))
+    asm('tnp ' + getreg(3))
     asm(prog_name + '_L' + str(current_label) + ':')
     current_label += 1
     asm('isv ' + getreg(3) + ', ' + getreg(0))
